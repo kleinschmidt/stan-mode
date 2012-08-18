@@ -28,6 +28,9 @@
 ;; Customizable Variables
 ;;
 
+(defun stan-mode-version ()
+  "Currently package.el doesn't support prerelease version numbers."
+  "0.0.1")
 
 (defgroup stan nil
   "A Stan major mode."
@@ -43,6 +46,11 @@
 
 (defvar stan-comment-start "//" "Stan comment style to use")
 (defvar stan-comment-end "" "Stan comment style to use")
+
+(defvar stan-mode-abbrev-table nil
+  "Abbrev table used in stan-mode buffers.")
+
+(define-abbrev-table 'stan-mode-abbrev-table ())
 
 ;; Font-Locks
 
@@ -74,12 +82,12 @@
 
 ;;; Define Syntax table
 (setq stan-mode-syntax-table (make-syntax-table))
+;; support #, //, and /* ... */ comments
 ;; see http://www.slac.stanford.edu/comp/unix/gnu-info/elisp_32.html
 (modify-syntax-entry ?\/  ". 124b"  stan-mode-syntax-table)
 (modify-syntax-entry ?*  ". 23"  stan-mode-syntax-table)
 (modify-syntax-entry ?\n "> b"  stan-mode-syntax-table)
 (modify-syntax-entry ?#  "< b"  stan-mode-syntax-table)
-;;
 (modify-syntax-entry ?(  "()" stan-mode-syntax-table)
 (modify-syntax-entry ?)  ")(" stan-mode-syntax-table)
 (modify-syntax-entry ?{  "({" stan-mode-syntax-table)
