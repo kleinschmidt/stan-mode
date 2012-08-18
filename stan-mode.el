@@ -21,8 +21,6 @@
 
 (require 'font-lock)
 
-(eval-when-compile
-  (require 'cl))
 
 ;;
 ;; Customizable Variables
