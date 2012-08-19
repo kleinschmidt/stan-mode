@@ -95,14 +95,11 @@
 
 ;; Indenting
 
-(defun stan-indent-region (start end &optional quiet)
-  (funcall 'c-indent-region start end quiet))
+;; (defun stan-indent-region (start end &optional quiet)
+;;   (funcall 'c-indent-region start end quiet))
 
-(defun stan-indent-line ()
-  (funcall 'c-indent-line))
-
-(setq indent-line-function 'stan-indent-line)
-(setq indent-region-function 'stan-indent-region)
+;; (defun stan-indent-line ()
+;;   (funcall 'c-indent-line))
 
 ;; 
 ;; Define Major Mode
@@ -122,10 +119,11 @@
   (setq comment-start stan-comment-end)
   ;; no tabs
   (setq indent-tabs-mode nil)
-  (make-local-variable 'indent-line-function)
-  (setq indent-line-function stan-indent-line)
-  (make-local-variable 'indent-region-function)
-  (setq indent-region-function stan-indent-region)
+  ;; (setq c-syntatic-information t)
+  ;; (make-local-variable 'indent-line-function)
+  ;; (setq indent-line-function 'stan-indent-line)
+  ;; (make-local-variable 'indent-region-function)
+  ;; (setq indent-region-function 'stan-indent-region)
   )
 
 (provide 'stan-mode)
