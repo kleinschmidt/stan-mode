@@ -18,21 +18,26 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>
 ;;; Commentary:
-
-(require 'cc-mode)
 (require 'font-lock)
 
 ;;
 ;; Customizable Variables
 ;;
 
-(defun stan-mode-version ()
-  "Currently package.el doesn't support prerelease version numbers."
-  "0.0.1")
+;; Indentation notes
+;; - Lines ending with ; are complete statements/expr
+;; - If complete statement, indent at same level as previous 
+;;   complete statement
+;; - If not complete statement, then indent to
+;;   - open ( or [
+;;   - <-, ~ 
+;;   - else last line
+;; - If previous line ends in {, indent >>
+;; - If previous line ends in }, indent <<
+;; - If previous line begins with "for", indent >>
 
-(defgroup stan nil
-  "A Stan major mode."
-  :group 'languages)
+
+(defun stan-mode-version () "0.0.1")
 
 (defvar stan-mode-hook nil)
 
@@ -49,6 +54,7 @@
   "Abbrev table used in stan-mode buffers.")
 
 (define-abbrev-table 'stan-mode-abbrev-table ())
+
 
 ;; Font-Locks
 
@@ -94,39 +100,33 @@
 (modify-syntax-entry ?]  ")[" stan-mode-syntax-table)
 
 ;; Indenting
-
-;; (defun stan-indent-region (start end &optional quiet)
-;;   (funcall 'c-indent-region start end quiet))
-
-;; (defun stan-indent-line ()
-;;   (funcall 'c-indent-line))
+;; TODO:
 
 ;; 
 ;; Define Major Mode
 ;;
 (define-derived-mode stan-mode fundamental-mode "Stan"
-  "A major mode for editing Sample files."
+  "A major mode for editing Stan files."
   :syntax-table stan-mode-syntax-table
+  :abbrev-table stan-mode-abbrev-table
+  :group 'languages
 
   ;; syntax highlighting
   (setq font-lock-defaults '((stan-font-lock-keywords)))
 
   ;; comments
   (setq mode-name "Stan")
-  (make-local-variable 'comment-start)
-  (setq comment-start stan-comment-start)
-  (make-local-variable 'comment-end)
-  (setq comment-start stan-comment-end)
+  ;;(setq comment-start stan-comment-start)
+  ;; (set (make-local-variable 'comment-start) "// ")
+  ;; (set (make-local-variable 'comment-end) "")
+  (set (make-local-variable 'comment-start) stan-comment-start)
+  (set (make-local-variable 'comment-end) stan-comment-end)
   ;; no tabs
   (setq indent-tabs-mode nil)
-  ;; (setq c-syntatic-information t)
-  ;; (make-local-variable 'indent-line-function)
-  ;; (setq indent-line-function 'stan-indent-line)
-  ;; (make-local-variable 'indent-region-function)
-  ;; (setq indent-region-function 'stan-indent-region)
   )
 
 (provide 'stan-mode)
+
 
 ;;; On Load
 ;;;###autoload
