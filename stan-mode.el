@@ -24,17 +24,6 @@
 ;; Customizable Variables
 ;;
 
-;; Indentation notes
-;; - Lines ending with ; are complete statements/expr
-;; - If complete statement, indent at same level as previous 
-;;   complete statement
-;; - If not complete statement, then indent to
-;;   - open ( or [
-;;   - <-, ~ 
-;;   - else last line
-;; - If previous line ends in {, indent >>
-;; - If previous line ends in }, indent <<
-;; - If previous line begins with "for", indent >>
 
 
 (defun stan-mode-version () "0.0.1")
@@ -89,6 +78,7 @@
 ;; support #, //, and /* ... */ comments
 ;; see http://www.slac.stanford.edu/comp/unix/gnu-info/elisp_32.html
 (modify-syntax-entry ?\/  ". 124b"  stan-mode-syntax-table)
+;;(modify-syntax-entry ?_  ". 124b"  stan-mode-syntax-table)
 (modify-syntax-entry ?*  ". 23"  stan-mode-syntax-table)
 (modify-syntax-entry ?\n "> b"  stan-mode-syntax-table)
 (modify-syntax-entry ?#  "< b"  stan-mode-syntax-table)
@@ -101,6 +91,32 @@
 
 ;; Indenting
 ;; TODO:
+;; Indentation notes
+;; - Lines ending with ; are complete statements/expr
+;; - If complete statement, indent at same level as previous 
+;;   complete statement
+;; - If not complete statement, then indent to
+;;   - open ( or [
+;;   - <-, ~ 
+;;   - else last line
+;; - If previous line ends in {, indent >>
+;; - If previous line ends in }, indent <<
+;; - If previous line begins with "for", indent >>
+
+(defvar stan-indenter-keywords  '("for")
+  "Keywords whose presence at start of line means to indent the next line")
+
+(defun stan-indenter-keywords-regexp ()
+  "Build regexp out of `stan-indenter-keywords`"
+  (regexp-opt stan-indenter-keywords 'words))
+(defvar stan-end-of-cmd ";")
+(defvar stan-indenders "{")
+
+;; http://www.emacswiki.org/emacs/EndOfLineNoComments
+;; (defun stan-move-end-of-line ()
+;;   (interactive)
+;;   (skip-syntax-forward "^<" (line-end-position))
+;;   (skip-syntax-backward " " (line-beginning-position)))
 
 ;; 
 ;; Define Major Mode
