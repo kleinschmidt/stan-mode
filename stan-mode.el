@@ -18,15 +18,28 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>
 ;;; Commentary:
+;;
+;; Right not this is a basic mode that defines syntax highlighting,
+;; and the syntax table.  
+;; 
+;; TODO:
+;; - command to compile .stan files into cpp
+;; - use compile-mode, flymake or custom command to parse compilation
+;;   files
+;; - indentation
+;; - forward-sexp, backward-sexp
+;; - SMIE or semantic grammar
 (require 'font-lock)
 
 ;;
 ;; Customizable Variables
 ;;
 
-
-
-(defun stan-mode-version () "0.0.1")
+(setq stan-mode-version "0.0.1")
+(defun stan-version ()
+  "Show the `stan-mode' version in the echo area."
+  (interactive)
+  (message (concat "stan-mode version " stan-mode-version)))
 
 (defvar stan-mode-hook nil)
 
@@ -67,6 +80,43 @@
   (regexp-opt '("for" "in" "lp__" "T") 'words)
   "Stan keywords.")
 
+(defvar stan-functions-regexp
+  (regexp-opt
+   '("abs" "int_step" "min" "max" "if_else" "step" "fabs" "fdim" "fmin" "fmax"
+     "fmod" "floor" "ceil" "round" "trunc" "sqrt" "cbrt" "square" "exp" "exp2"
+     "expm1" "log" "log2" "log10" "pow" "logit" "inv_logit" "inv_cloglog"
+     "hypot" "cos" "sin" "tan" "acos" "asin" "atan" "atan2" "cosh" "sinh"
+     "tanh" "acosh" "asinh" "atanh" "erf" "erfc" "Phi" "log_loss" "tgamma"
+     "lgamma" "lmgamma" "lbeta" "binomial_coefficient_log" "fma" "multiply_log"
+     "log1p" "log1m" "log1p_exp" "log_sum_exp" "rows" "cols" "dot_product"
+     "prod" "mean" "variance" "sd" "diagonal" "diag_matrix" "col" "row"
+     "softmax" "trace" "determinant" "inverse" "eigenvalue" "eigenvalues_sym"
+     "cholesky" "singular_values" "log_normal_p" "normal_p" "exponential_p"
+     "gamma_p" "weibull_p")
+   'words)
+  "List of Stan functions")
+
+(defvar stan-distribution-list 
+  '("bernoulli" "bernoulli_logit" "binomial" "beta_binomial" "hypergeometric"
+    "categorical" "ordered_logistic" "neg_binomial" "poisson" "multinomial"
+    "normal" "student_t" "cauchy" "double_exponential" "logistic"
+    "lognormal" "chi_square" "inv_chi_square" "scaled_inv_chi_square"
+    "exponential" "gamma" "inv_gamma" "weibull" "pareto" "beta" "uniform"
+    "dirichlet" "multi_normal" "multi_normal_cholesky" "multi_student_t"
+    "wishart" "inv_wishart" "lkj_cov" "lkj_corr_cholesky")
+  "List of Stan distributions")
+
+(defvar stan-distribution-regexp
+  (regexp-opt (append stan-distribution-list
+                      (mapcar (lambda (x) (format "log_%s" x))
+                              stan-distribution-list))
+              'words)
+  "Regexp of Stan distributions")
+
+(defvar stan-operators
+  '("+" "-" "*" "/" ".*" "./" "\\")
+  "List of Stan operators")
+
 (defvar stan-font-lock-keywords
   `((,stan-blocks-regexp . font-lock-keyword-face)
     (,stan-types-regexp . font-lock-type-face)
@@ -78,7 +128,6 @@
 ;; support #, //, and /* ... */ comments
 ;; see http://www.slac.stanford.edu/comp/unix/gnu-info/elisp_32.html
 (modify-syntax-entry ?\/  ". 124b"  stan-mode-syntax-table)
-;;(modify-syntax-entry ?_  ". 124b"  stan-mode-syntax-table)
 (modify-syntax-entry ?*  ". 23"  stan-mode-syntax-table)
 (modify-syntax-entry ?\n "> b"  stan-mode-syntax-table)
 (modify-syntax-entry ?#  "< b"  stan-mode-syntax-table)
@@ -88,6 +137,8 @@
 (modify-syntax-entry ?}  "){" stan-mode-syntax-table)
 (modify-syntax-entry ?[  "(]" stan-mode-syntax-table)
 (modify-syntax-entry ?]  ")[" stan-mode-syntax-table)
+(modify-syntax-entry ?<  "(>" stan-mode-syntax-table)
+(modify-syntax-entry ?>  ")<" stan-mode-syntax-table)
 
 ;; Indenting
 ;; TODO:
@@ -102,21 +153,6 @@
 ;; - If previous line ends in {, indent >>
 ;; - If previous line ends in }, indent <<
 ;; - If previous line begins with "for", indent >>
-
-(defvar stan-indenter-keywords  '("for")
-  "Keywords whose presence at start of line means to indent the next line")
-
-(defun stan-indenter-keywords-regexp ()
-  "Build regexp out of `stan-indenter-keywords`"
-  (regexp-opt stan-indenter-keywords 'words))
-(defvar stan-end-of-cmd ";")
-(defvar stan-indenders "{")
-
-;; http://www.emacswiki.org/emacs/EndOfLineNoComments
-;; (defun stan-move-end-of-line ()
-;;   (interactive)
-;;   (skip-syntax-forward "^<" (line-end-position))
-;;   (skip-syntax-backward " " (line-beginning-position)))
 
 ;; 
 ;; Define Major Mode
