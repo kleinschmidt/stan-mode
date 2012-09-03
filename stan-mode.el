@@ -126,7 +126,7 @@
     (,stan-distribution-regexp . font-lock-function-name-face)))
 
 ;;; Define Syntax table
-(setq stan-mode-syntax-table (make-syntax-table))
+(setq stan-mode-syntax-table (make-syntax-table c-mode-syntax-table))
 ;; support #, //, and /* ... */ comments
 ;; see http://www.slac.stanford.edu/comp/unix/gnu-info/elisp_32.html
 (modify-syntax-entry ?\/  ". 124b"  stan-mode-syntax-table)
@@ -139,8 +139,9 @@
 (modify-syntax-entry ?}  "){" stan-mode-syntax-table)
 (modify-syntax-entry ?[  "(]" stan-mode-syntax-table)
 (modify-syntax-entry ?]  ")[" stan-mode-syntax-table)
-(modify-syntax-entry ?<  "(>" stan-mode-syntax-table)
-(modify-syntax-entry ?>  ")<" stan-mode-syntax-table)
+;; cannot identify both <...> and <- 
+;; (modify-syntax-entry ?<  "(>" stan-mode-syntax-table)
+;; (modify-syntax-entry ?>  ")<" stan-mode-syntax-table)
 
 ;; Indenting
 ;; TODO:
