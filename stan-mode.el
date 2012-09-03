@@ -57,7 +57,6 @@
 
 (define-abbrev-table 'stan-mode-abbrev-table ())
 
-
 ;; Font-Locks
 
 ;; <- and ~ 
@@ -121,7 +120,10 @@
   `((,stan-blocks-regexp . font-lock-keyword-face)
     (,stan-types-regexp . font-lock-type-face)
     (,stan-builtin-regexp . font-lock-keyword-face)
-    (,stan-assign-regexp . font-lock-reference-face)))
+    (,stan-assign-regexp . font-lock-reference-face)
+    ;; faces used in ess-bugs
+    (,stan-functions-regexp . font-lock-function-name-face)
+    (,stan-distribution-regexp . font-lock-function-name-face)))
 
 ;;; Define Syntax table
 (setq stan-mode-syntax-table (make-syntax-table))
