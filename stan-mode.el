@@ -72,11 +72,11 @@
   (regexp-opt 
    '("int" "real" "vector" "simplex" "ordered" "row_vector" "matrix" 
      "corr_matrix" "cov_matrix")
-   'words)
+   'symbols)
   "Stan data types.")
 
 (defvar stan-builtin-regexp
-  (regexp-opt '("for" "in" "lp__" "T") 'words)
+  (regexp-opt '("for" "in" "lp__" "T") 'symbols)
   "Stan keywords.")
 
 (defvar stan-functions-regexp
@@ -92,7 +92,7 @@
      "softmax" "trace" "determinant" "inverse" "eigenvalue" "eigenvalues_sym"
      "cholesky" "singular_values" "log_normal_p" "normal_p" "exponential_p"
      "gamma_p" "weibull_p")
-   'words)
+   'symbols)
   "List of Stan functions")
 
 (defvar stan-distribution-list 
@@ -109,7 +109,7 @@
   (regexp-opt (append stan-distribution-list
                       (mapcar (lambda (x) (format "log_%s" x))
                               stan-distribution-list))
-              'words)
+              'symbols)
   "Regexp of Stan distributions")
 
 (defvar stan-operators
@@ -126,7 +126,7 @@
     (,stan-distribution-regexp . font-lock-function-name-face)))
 
 ;;; Define Syntax table
-(setq stan-mode-syntax-table (make-syntax-table c-mode-syntax-table))
+(setq stan-mode-syntax-table (make-syntax-table))
 ;; support #, //, and /* ... */ comments
 ;; see http://www.slac.stanford.edu/comp/unix/gnu-info/elisp_32.html
 (modify-syntax-entry ?\/  ". 124b"  stan-mode-syntax-table)
@@ -139,6 +139,8 @@
 (modify-syntax-entry ?}  "){" stan-mode-syntax-table)
 (modify-syntax-entry ?[  "(]" stan-mode-syntax-table)
 (modify-syntax-entry ?]  ")[" stan-mode-syntax-table)
+(modify-syntax-entry ?<  "." stan-mode-syntax-table)
+(modify-syntax-entry ?>  "." stan-mode-syntax-table)
 ;; cannot identify both <...> and <- 
 ;; (modify-syntax-entry ?<  "(>" stan-mode-syntax-table)
 ;; (modify-syntax-entry ?>  ")<" stan-mode-syntax-table)
