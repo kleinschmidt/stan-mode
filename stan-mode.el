@@ -67,6 +67,7 @@
   "\\<\\(model\\|\\(transformed[ \t]+\\)?\\(data\\|parameters\\)\\|generated[ \t]+quantities\\)\\>"
   "Stan blocks.")
 
+
 (defvar stan-types-regexp
   (regexp-opt 
    '("int" "real" "vector" "simplex" "ordered" "row_vector" "matrix" 
@@ -77,6 +78,14 @@
 (defvar stan-builtin-regexp
   (regexp-opt '("for" "in" "lp__" "T") 'words)
   "Stan keywords.")
+
+(defvar stan-distributions
+  ()
+  "Stan distributions")
+(defvar stan-functions)
+(defvar stan-operators
+  '("+" "-" "*" "/" "\\", "./", ".*")
+  "Stan operators") 
 
 (defvar stan-font-lock-keywords
   `((,stan-blocks-regexp . font-lock-keyword-face)
@@ -125,8 +134,12 @@
   (setq indent-tabs-mode nil)
   )
 
-(provide 'stan-mode)
+;;  Example error line
+;; LOCATION:  file=input; line=2, column=10
+;; (stan "LOCATION:[ 	]+file=input;[ 	]+line=\\([0-9]+\\),
+;; column=\\([0-9]+\\)" nil 1 2)
 
+(provide 'stan-mode)
 
 ;;; On Load
 ;;;###autoload
