@@ -202,8 +202,8 @@ See the documenation for stanc.
         (setq command (concat command (format " --name=%s " model-name))))
     (setq command (concat command " " input))
     (message command)
-    (shell-command command stan-output-buffer-name stan-output-buffer-name)
-    ))
+    (shell-command command stan-output-buffer-name
+                   stan-output-buffer-name)))
 
 (defun stan-stanc-compile-buffer (&optional output model-name)
   "Run stanc on the current buffer"
