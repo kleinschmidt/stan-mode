@@ -180,8 +180,8 @@
   "For a Stan buffer, generate a path to output"
   (if (buffer-file-name)
       (file-name-sans-extension
-       (file-name-non-directory buffer-file-name))
-    ("anon_model")))
+       (file-name-nondirectory buffer-file-name))
+    "anon_model"))
 
 ;; (setq stan-compile-output)
 
@@ -208,21 +208,17 @@ See the documenation for stanc.
 (defun stan-stanc-compile-buffer (&optional output model-name)
   "Run stanc on the current buffer"
   (interactive
-   "Foutput: %s\nMmodel name: %s"
-   (stan-path-to-cpp-file)
-   (stan-model-name))
+   (list (read-string "output: " (stan-path-to-cpp-file) nil nil nil)
+         (read-string "model-name: " (stan-model-name) nil nil nil)))
   (let ((input))
-    (if (buffer-file-name)
-        (progn
-          (save-buffer)
-          (setq input buffer-file-name)
-          )
-        (concat (file-name-sans-extension (buffer-file-name)) ".cpp")
-      (make-temp-file "stan" nil ".cpp")))
-  (stan-stanc-compile input output model-name))
-(setq stan-stanc "~/remotes/stan/bin/stanc")
-(file-exists-p stan-stanc)
-
+    ;; if buffer is a file: save file, use that file as input. if
+    ;; buffer is not a file create a temporary file, and write buffer
+    ;; contents to that.
+    (if (setq input (buffer-file-name))
+        (save-buffer)
+      (setq input (make-temp-file "stan" nil ".stan")) 
+      (write-region nil nil input))
+    (stan-stanc-compile input output model-name)))
 
 ;; Indenting
 ;; TODO:
