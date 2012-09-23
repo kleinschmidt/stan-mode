@@ -71,12 +71,12 @@
 (defvar stan-types-regexp
   (regexp-opt 
    '("int" "real" "vector" "simplex" "ordered" "row_vector" "matrix" 
-     "corr_matrix" "cov_matrix")
+     "corr_matrix" "cov_matrix" "positive_ordered")
    'symbols)
   "Stan data types.")
 
 (defvar stan-builtin-regexp
-  (regexp-opt '("for" "in" "lp__" "T") 'symbols)
+  (regexp-opt '("for" "in" "lp__" "T" "print" "lower" "upper") 'symbols)
   "Stan keywords.")
 
 (defvar stan-functions-regexp
@@ -141,6 +141,9 @@
 (modify-syntax-entry ?]  ")[" stan-mode-syntax-table)
 (modify-syntax-entry ?<  "." stan-mode-syntax-table)
 (modify-syntax-entry ?>  "." stan-mode-syntax-table)
+;; otherwise lower= will not highlight
+(modify-syntax-entry ?=  "." stan-mode-syntax-table)
+(modify-syntax-entry ?\" "\"" stan-mode-syntax-table)
 ;; cannot identify both <...> and <- 
 ;; (modify-syntax-entry ?<  "(>" stan-mode-syntax-table)
 ;; (modify-syntax-entry ?>  ")<" stan-mode-syntax-table)
