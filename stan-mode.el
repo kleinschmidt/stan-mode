@@ -20,7 +20,9 @@
 ;;; Commentary:
 ;;
 ;; Right not this is a basic mode that defines syntax highlighting,
-;; and the syntax table.  
+;; and the syntax table.
+;;
+;; - imenu
 ;; 
 ;; TODO:
 ;; - command to compile .stan files into cpp
@@ -149,6 +151,11 @@
 ;; (modify-syntax-entry ?<  "(>" stan-mode-syntax-table)
 ;; (modify-syntax-entry ?>  ")<" stan-mode-syntax-table)
 
+;; Imenu tags 
+(defvar stan-imenu-generic-expression
+  `(("Variable" ,(concat stan-types-regexp "\\(<.*>\\|[.*]\\)?[ 	\n]*"
+                         "\\([A-Za-z0-9_]+\\)") 3)))
+
 ;; Indenting
 ;; TODO:
 ;; Indentation notes
@@ -184,6 +191,8 @@
   (set (make-local-variable 'comment-end) stan-comment-end)
   ;; no tabs
   (setq indent-tabs-mode nil)
+  ;;
+  (setq imenu-generic-expression stan-imenu-generic-expression)
   )
 
 ;;  Example error line
