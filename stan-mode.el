@@ -155,7 +155,7 @@
 (defvar stan-imenu-generic-expression
   `(("Variable" ,(concat stan-types-regexp "\\(<.*>\\|[.*]\\)?[ 	\n]*"
                          "\\([A-Za-z0-9_]+\\)") 3)
-    ("Block" ,stan-block-regexp 1))
+    ("Block" ,stan-blocks-regexp 1))
   "Stan mode imenu expression")
 
 ;; Indenting
