@@ -67,7 +67,7 @@
   "Assigment operators")
 
 (defvar stan-blocks-regexp
-  "\\<\\(model\\|\\(transformed[ \t]+\\)?\\(data\\|parameters\\)\\|generated[ \t]+quantities\\)\\>"
+  "\\<\\(model\\|\\(?:transformed[ \t]+\\)?\\(?:data\\|parameters\\)\\|generated[ \t]+quantities\\)\\>"
   "Stan blocks.")
 
 
@@ -154,7 +154,9 @@
 ;; Imenu tags 
 (defvar stan-imenu-generic-expression
   `(("Variable" ,(concat stan-types-regexp "\\(<.*>\\|[.*]\\)?[ 	\n]*"
-                         "\\([A-Za-z0-9_]+\\)") 3)))
+                         "\\([A-Za-z0-9_]+\\)") 3)
+    ("Block" ,stan-block-regexp 1))
+  "Stan mode imenu expression")
 
 ;; Indenting
 ;; TODO:
